@@ -43,5 +43,9 @@ public class HomeController {
 	   public void adminHome() {
 	      log.info("adminHome...");
 	   }
+	   @GetMapping("/login/loginForm")
+	   public void loginForm() {
+		   log.info("Welcome Login form!");
+	   }
 	
 }
