@@ -23,16 +23,13 @@
     </c:if>
     <p>
         <label for="username">아이디</label>
-        <input type="text" id="id" name="username" />
+        <input type="text" id="id" name="id" />
     </p>
     <p>
         <label for="password">비밀번호</label>
-        <input type="password" id="password" name="password"/>
+        <input type="password" id="password" name="pw"/>
     </p>
-    
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> --%>
-    
     <button type="submit" class="btn">로그인</button>
 </form:form>
 

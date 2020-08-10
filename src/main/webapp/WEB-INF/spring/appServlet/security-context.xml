@@ -5,37 +5,35 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     
-    <!-- 인증 -->
     <!-- 검사 URL -->
- 	<http auto-config="true" use-expressions="true">
-
+    <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/login/loginForm" access="permitAll" />
         <intercept-url pattern="/" access="permitAll" />
+        <intercept-url pattern="/user/**" access="hasRole('ADMIN')" />
         <intercept-url pattern="/admin/**" access="hasRole('ADMIN')" />
-        <intercept-url pattern="/**" access="hasAnyRole('USER, ADMIN, MEMBER')" />
+        <intercept-url pattern="/**" access="hasAnyRole('USER,ADMIN')" />
         
-        <!-- admin으로 치고 들어오려면, 권한을 가지고 있어야 한다는 뜻 -->
-		<form-login /> <!-- 이건 디폴트 -->
-		
-		<form-login login-page="/login/loginForm"
+		<form-login login-page="/login/loginForm" 
 					default-target-url="/"
-			   		authentication-failure-url="/login/loginForm?error"
+					authentication-failure-url="/login/loginForm?error"
 					username-parameter="id"
-					password-parameter="password"/>
-					
-		<logout logout-url="/logout" logout-success-url="/" />		       
+					password-parameter="pw" />
+		
+		<logout logout-url="/logout" logout-success-url="/"/>
+		
 		<access-denied-handler error-page="/login/accessDenied" />
+		<csrf disabled="false"></csrf>
+		
     </http>
     
-    <!-- 권한 -->
-    <!-- provider -->
 	<authentication-manager>
 		<authentication-provider> 
 			<user-service> 
-				<user name="member" password="{noop}member" authorities="ROLE_MEMBER" /> 
+				<user name="user" password="{noop}user" authorities="ROLE_USER" /> 
 				<user name="admin" password="{noop}admin" authorities="ROLE_MEMBER,ROLE_ADMIN" /> 
 			</user-service> 
 		</authentication-provider>
 	</authentication-manager>
+    
     
 </beans:beans>

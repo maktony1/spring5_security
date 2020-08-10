@@ -6,12 +6,12 @@
 <html lang="ko">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>user page</title>
+    <title>error</title>
 </head>
 
 <body>
 
-<h1>user 페이지 입니다.</h1>
+<h1>error 페이지 입니다.</h1>
 
 <h3>[<a href="<c:url value="/" />">홈</a>]</h3>
 

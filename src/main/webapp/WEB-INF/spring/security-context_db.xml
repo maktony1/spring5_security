@@ -7,8 +7,10 @@
     
     <!-- 검사 URL -->
     <http auto-config="true" use-expressions="true">
-        <intercept-url pattern="/login/loginForm" access="permitAll" />
         <intercept-url pattern="/" access="permitAll" />
+        <intercept-url pattern="/login/loginForm" access="permitAll" />
+        <intercept-url pattern="/user/userForm" access="permitAll" />
+        <intercept-url pattern="/user/**" access="hasRole('USER')" />
         <intercept-url pattern="/admin/**" access="hasRole('ADMIN')" />
         <intercept-url pattern="/**" access="hasAnyRole('USER, ADMIN')" />
         
@@ -16,17 +18,22 @@
                     default-target-url="/"
                     authentication-failure-url="/login/loginForm?error"
                     username-parameter="id"
-                    password-parameter="password" />
+                    password-parameter="pw" />
         
-         <logout logout-url="/logout"
-                logout-success-url="/" /> 
+         <logout logout-url="/logout" logout-success-url="/" /> 
                 
         <access-denied-handler error-page="/login/accessDenied" />
+        <csrf disabled="false"></csrf>
     </http>    
     
-     <beans:bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+    <beans:bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
         <beans:property name="dataSource" ref="dataSource"/>
     </beans:bean> 
+
+	<!-- 인코더 객체 생성 -->
+    <beans:bean id="customNoOpPasswordEncoder" class="edu.bit.ex.security.CustomNoOpPasswordEncoder" />
+    <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+    
     
 <!--      <jdbc-user-service 
             data-source-ref="dataSource"
@@ -36,15 +43,20 @@
             group-authorities-by-username-query="select g.id, g.group_name, ga.authority from groups g, group_members gm, group_authorities ga where gm.username = ? and g.id = ga.group_id and g.id = gm.group_id"
     /> -->
 	
-    <!--  provider  -->
+	
+    <!--  기존에 짜여져 있는 DB를 이용    -->
       <authentication-manager>
         <authentication-provider>
+        <password-encoder ref="bcryptPasswordEncoder"/>
         <jdbc-user-service 
             data-source-ref="dataSource"
-            role-prefix=""
             users-by-username-query="select username, password, enabled from users where username = ?"
-            authorities-by-username-query="select username, authority from authorities where username = ?"
-        />
+            authorities-by-username-query="select username, authority from authorities where username = ?"        />
+        <!-- 
+        	기존의 쿼리에 형태를 맞추어야 한다.
+        	select username, password, enabled from users
+        	select ename, 	 empno,    1       from users
+         -->
         </authentication-provider>
     </authentication-manager> 
     

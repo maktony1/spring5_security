@@ -21,10 +21,15 @@
 	<form:form action="${pageContext.request.contextPath}/logout" method="POST">
 	    <input type="submit" value="로그아웃" />
 	</form:form>
+	<!-- 시큐리티가 제공하는 principal 객체. var principal = principal -->
+	<sec:authentication var="principal" property="principal"/>
+	<p>${principal.username} 님 환영합니다.</p>
+	
 	<p><a href="<c:url value="/loginInfo" />">로그인 정보 확인 방법3 가지</a></p>
 </sec:authorize>
 
 <h3>
+    [<a href="<c:url value="/user/userForm" />">회원가입</a>]
     [<a href="<c:url value="/user/userHome" />">유저 홈</a>]
     [<a href="<c:url value="/admin/adminHome" />">관리자 홈</a>]
 </h3>
